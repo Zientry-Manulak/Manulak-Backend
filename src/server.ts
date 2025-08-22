@@ -2,12 +2,10 @@ import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
 import baseRouter from './routes/baseRoute';
-import { initDBConnection } from './core/config/init-db-connection';
 
 const app = express();
 
 // database connection
-initDBConnection()
 
 // middleware
 app.use(cors())
