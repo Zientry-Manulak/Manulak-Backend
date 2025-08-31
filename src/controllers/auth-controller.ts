@@ -44,12 +44,17 @@ class AuthController {
         );
       }
 
-      const response: IAuthResponse = await this.authService.refresh(
-        refreshToken
-      );
+      const response = await this.authService.refresh(refreshToken);
+
+      res.cookie("refreshToken", response.newRefreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
 
       handleSuccess(res, "Token refreshed successfully", {
-        accessToken: response.tokens.accessToken,
+        accessToken: response.accessToken,
         user: response.user,
       });
     } catch (error: any) {
