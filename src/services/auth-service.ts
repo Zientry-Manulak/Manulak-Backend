@@ -33,8 +33,12 @@ export class AuthService {
 
   async refresh(refreshToken: string): Promise<IAuthResponse> {
     const stored = await authRepository.findRefreshToken(refreshToken);
+
     if (!stored || stored.expires_at < new Date()) {
-      throw new Error("Invalid or expired refresh token");
+      if (stored) {
+        await authRepository.deleteRefreshToken(refreshToken);
+      }
+      throw new Error("Session expired, please login again");
     }
 
     const newAccessToken = generateToken(32);

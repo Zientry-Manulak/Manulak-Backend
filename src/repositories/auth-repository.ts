@@ -40,6 +40,12 @@ export class AuthRepository {
             where: { token },
         });
     }
+
+    async deleteRefreshToken(token: string) {
+    return prisma.refreshToken.delete({
+        where: { token },
+    });
+}
 }
 
 export const authRepository = new AuthRepository();
